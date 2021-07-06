@@ -1,21 +1,21 @@
 //x axis will be median age, percent lacking healthcare, percent in poverty
 //y axis will be median household income, percentage smokes, percent obese
 
-var svgWidth = 900;
-var svgHeight = 900;
+var svgWidth = 800;
+var svgHeight = 600;
 
 var margin = {
-  top: 20,
+  top: 40,
   right: 20,
-  bottom: 20,
-  left: 20
+  bottom: 80,
+  left: 200
 };
 
 var chartWidth = svgWidth - margin.left - margin.right;
 var chartHeight = svgHeight - margin.top - margin.bottom;
 
 var svg = d3
-  .select(".chart")
+  .select(".dynamicChart")
   .append("svg")
   .attr("width", svgWidth)
   .attr("height", svgHeight);
@@ -154,7 +154,7 @@ function renderXAxis(newXScale, xAxis) {
     .append("circle")
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
     .attr("cy", d => yLinearScale(d[chosenYAxis]))
-    .attr("r", 20)
+    .attr("r", 10)
     .attr("fill", "green")
     .attr("opacity", ".95");
 
@@ -162,7 +162,7 @@ function renderXAxis(newXScale, xAxis) {
     .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + 20})`);
 
     var yLabelsGroup = chartGroup.append("g")
-    .attr("transform", `translate(-20, ${chartHeight / 2})`);
+    .attr("transform", `translate(${chartWidth / 4}, ${chartHeight / 2})`);
 
     var povertyLabel = xLabelsGroup.append("text")
     .attr("x", 0)
@@ -192,8 +192,8 @@ function renderXAxis(newXScale, xAxis) {
     .attr("x", 0 - (chartHeight / 2))
     .attr("value", "income") // value to grab for event listener
     .classed("active", true)
-    //.attr("dy", "1em")
-    //.classed("axis-text", true)
+    .attr("dy", "1em")
+    .classed("axis-text", true)
     .text("Population Median Income");
 
     var smokesLabel = yLabelsGroup.append("text")
@@ -202,8 +202,8 @@ function renderXAxis(newXScale, xAxis) {
     .attr("x", 0 - (chartHeight / 2) - 20)
     .attr("value", "smokes") // value to grab for event listener
     .classed("inactive", true)
-    //.attr("dy", "1em")
-    //.classed("axis-text", true)
+    .attr("dy", "1em")
+    .classed("axis-text", true)
     .text("Percent of Population Who Smokes");
 
     var obeseLabel = yLabelsGroup.append("text")
@@ -212,8 +212,8 @@ function renderXAxis(newXScale, xAxis) {
     .attr("x", 0 - (chartHeight / 2) - 40)
     .attr("value", "obese") // value to grab for event listener
     .classed("inactive", true)
-    //.attr("dy", "1em")
-    //.classed("axis-text", true)
+    .attr("dy", "1em")
+    .classed("axis-text", true)
     .text("Percentage of Population Facing Obesity");
 
     var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
@@ -245,21 +245,21 @@ function renderXAxis(newXScale, xAxis) {
       //left off here
 
 
-      if (chosenXAxis === "num_albums") {
-        albumsLabel
-          .classed("active", true)
-          .classed("inactive", false);
-        hairLengthLabel
-          .classed("active", false)
-          .classed("inactive", true);
-      }
-      else {
-        albumsLabel
-          .classed("active", false)
-          .classed("inactive", true);
-        hairLengthLabel
-          .classed("active", true)
-          .classed("inactive", false);
-      }
+      // if (chosenXAxis === "num_albums") {
+      //   albumsLabel
+      //     .classed("active", true)
+      //     .classed("inactive", false);
+      //   hairLengthLabel
+      //     .classed("active", false)
+      //     .classed("inactive", true);
+      // }
+      // else {
+      //   albumsLabel
+      //     .classed("active", false)
+      //     .classed("inactive", true);
+      //   hairLengthLabel
+      //     .classed("active", true)
+      //     .classed("inactive", false);
+      //}
       
       });
