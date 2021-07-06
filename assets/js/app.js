@@ -165,9 +165,10 @@ function renderXAxis(newXScale, xAxis) {
     .enter()
     .append("text")
     .text(d => `${d.abbr}`)
-    .attr("x", d => xLinearScale(d[chosenXAxis]))
-    .attr("y", d => yLinearScale(d[chosenYAxis]))
-    .attr("text-anchor", "center");
+    .attr("x", d => xLinearScale(d[chosenXAxis]) - 7)
+    .attr("y", d => yLinearScale(d[chosenYAxis]) + 3)
+    .attr("text-anchor", "center")
+    .attr("font-size", 9);
 
 
     var xLabelsGroup = chartGroup.append("g")
