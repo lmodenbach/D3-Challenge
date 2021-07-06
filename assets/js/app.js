@@ -1,5 +1,5 @@
 //x axis will be median age, percent lacking healthcare, percent in poverty
-//y axis will be median household income, percentage smokes, percent obese
+//y axis will be median household income, percentage smokes, percent obesity
 
 var svgWidth = 800;
 var svgHeight = 600;
@@ -64,6 +64,7 @@ function renderXAxis(newXScale, xAxis) {
     return yAxis;
   }
 
+  
   function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
 
     circlesGroup.transition()
@@ -73,6 +74,7 @@ function renderXAxis(newXScale, xAxis) {
   
     return circlesGroup;
   }
+
 
   function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
 
@@ -97,29 +99,31 @@ function renderXAxis(newXScale, xAxis) {
     else if (chosenYAxis === "smokes") {
       yLabel = "Percent of Population Smokers: ";
     }
-    else if (chosenYAxis === "obese") {
-      yLabel = "Percent Obese: "; 
+    else if (chosenYAxis === "obesity") {
+      yLabel = "Percent obesity: "; 
     }
-  
+
     var toolTip = d3.tip()
       .attr("class", "tooltip")
       .offset([80, -60])
       .html(function(d) {
-        return (`${d.state}<br>${xLabel} ${d[chosenXAxis]}<br>${yLabel} ${d[chosenYAxis]}`);
+        return (`${d.state}<br>${xLabel}${d[chosenXAxis]}<br>${yLabel}${d[chosenYAxis]}`);
       });
+
   
     circlesGroup.call(toolTip);
   
     circlesGroup.on("mouseover", function(data) {
       toolTip.show(data);
     })
-      // onmouseout event
       .on("mouseout", function(data) {
         toolTip.hide(data);
       });
   
     return circlesGroup;
   }
+
+
 
   d3.csv("assets/data/data.csv").then(function(statisticalData, err) {
     if (err) throw err;
@@ -130,9 +134,17 @@ function renderXAxis(newXScale, xAxis) {
       data.poverty = +data.poverty;
       data.income = +data.income;
       data.smokes = +data.smokes;
-      data.obese = +data.obese;
+      data.obesity = +data.obesity;
     })
-  
+
+    function printData(d) { 
+      d.forEach(state => {
+      console.log(state.healthcare + ", " + state.age); 
+      })
+    }
+    printData(statisticalData);
+
+
     var xLinearScale = xScale(statisticalData, chosenXAxis);
     var yLinearScale = yScale(statisticalData, chosenYAxis);
 
@@ -156,13 +168,11 @@ function renderXAxis(newXScale, xAxis) {
     .attr("cy", d => yLinearScale(d[chosenYAxis]))
     .attr("r", 10)
     .attr("fill", "green")
-    .attr("opacity", ".95");
+    .attr("opacity", ".90");
+
 
     var xLabelsGroup = chartGroup.append("g")
     .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + 20})`);
-
-    var yLabelsGroup = chartGroup.append("g")
-    .attr("transform", `translate(${chartWidth / 4}, ${chartHeight / 2})`);
 
     var povertyLabel = xLabelsGroup.append("text")
     .attr("x", 0)
@@ -186,6 +196,9 @@ function renderXAxis(newXScale, xAxis) {
     .text("Median Age of Population");
 
 
+    var yLabelsGroup = chartGroup.append("g")
+    .attr("transform", `translate(${chartWidth / 4}, ${chartHeight / 2})`);
+
     var incomeLabel = yLabelsGroup.append("text")
     .attr("transform", "rotate(-90)")
     .attr("y", 0 - margin.left)
@@ -198,25 +211,27 @@ function renderXAxis(newXScale, xAxis) {
 
     var smokesLabel = yLabelsGroup.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("y", 0 - margin.left)
-    .attr("x", 0 - (chartHeight / 2) - 20)
+    .attr("y", 0 - margin.left - 20)
+    .attr("x", 0 - (chartHeight / 2))
     .attr("value", "smokes") // value to grab for event listener
     .classed("inactive", true)
     .attr("dy", "1em")
     .classed("axis-text", true)
     .text("Percent of Population Who Smokes");
 
-    var obeseLabel = yLabelsGroup.append("text")
+    var obesityLabel = yLabelsGroup.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("y", 0 - margin.left)
-    .attr("x", 0 - (chartHeight / 2) - 40)
-    .attr("value", "obese") // value to grab for event listener
+    .attr("y", 0 - margin.left - 40)
+    .attr("x", 0 - (chartHeight / 2))
+    .attr("value", "obesity") // value to grab for event listener
     .classed("inactive", true)
     .attr("dy", "1em")
     .classed("axis-text", true)
     .text("Percentage of Population Facing Obesity");
 
+
     var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+
 
       xLabelsGroup.selectAll("text")
       .on("click", function() {
@@ -224,9 +239,24 @@ function renderXAxis(newXScale, xAxis) {
       if (value !== chosenXAxis) {
         chosenXAxis = value;
         xLinearScale = xScale(statisticalData, chosenXAxis);
-        xAxis = renderXAxes(xLinearScale, xAxis);
+        xAxis = renderXAxis(xLinearScale, xAxis);
+
+        if (chosenXAxis === "poverty") {
+          povertyLabel
+            .classed("active", true)
+            .classed("inactive", false);
+        }
+        else if (chosenXAxis === "healthcare") {
+          healthcareLabel
+            .classed("active", false)
+            .classed("inactive", true);
+        }
+        else if (chosenXAxis === "age") {
+          ageLabel
+            .classed("active", false)
+            .classed("inactive", true);
+        }
       }
-      });  
 
       yLabelsGroup.selectAll("text")
       .on("click", function() {
@@ -235,31 +265,28 @@ function renderXAxis(newXScale, xAxis) {
         chosenYAxis = value;
         yLinearScale = yScale(statisticalData, chosenYAxis);
         yAxis = renderYAxis(yLinearScale, yAxis);
+
+        circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+        circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+
+        if (chosenYAxis === "income") {
+          incomeLabel
+            .classed("active", true)
+            .classed("inactive", false);
+        }
+        else if (chosenYAxis === "smokes") {
+          smokesLabel
+            .classed("active", false)
+            .classed("inactive", true);
+        }
+        else if (chosenYAxis === "obesity") {
+          obesityLabel
+            .classed("active", false)
+            .classed("inactive", true);
+        }
       }
-      });
+    });
 
-      circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
-      circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
-  
-  
-      //left off here
+  }); 
 
-
-      // if (chosenXAxis === "num_albums") {
-      //   albumsLabel
-      //     .classed("active", true)
-      //     .classed("inactive", false);
-      //   hairLengthLabel
-      //     .classed("active", false)
-      //     .classed("inactive", true);
-      // }
-      // else {
-      //   albumsLabel
-      //     .classed("active", false)
-      //     .classed("inactive", true);
-      //   hairLengthLabel
-      //     .classed("active", true)
-      //     .classed("inactive", false);
-      //}
-      
-      });
+});
