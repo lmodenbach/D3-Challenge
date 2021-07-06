@@ -105,11 +105,9 @@ function renderXAxis(newXScale, xAxis) {
 
     var toolTip = d3.tip()
       .attr("class", "tooltip")
-      //.offset([80, -60])
       .html(function(d) {
         return (`${d.state}<br>${xLabel}${d[chosenXAxis]}<br>${yLabel}${d[chosenYAxis]}`);
       });
-
   
     circlesGroup.call(toolTip);
   
@@ -161,6 +159,15 @@ function renderXAxis(newXScale, xAxis) {
     .attr("r", 10)
     .attr("fill", "green")
     .attr("opacity", ".90");
+
+    chartGroup.selectAll("text")
+    .data(statisticalData)
+    .enter()
+    .append("text")
+    .text(d => `${d.abbr}`)
+    .attr("x", d => xLinearScale(d[chosenXAxis]))
+    .attr("y", d => yLinearScale(d[chosenYAxis]))
+    .attr("text-anchor", "center");
 
 
     var xLabelsGroup = chartGroup.append("g")
