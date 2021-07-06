@@ -100,12 +100,12 @@ function renderXAxis(newXScale, xAxis) {
       yLabel = "Percent of Population Smokers: ";
     }
     else if (chosenYAxis === "obesity") {
-      yLabel = "Percent obesity: "; 
+      yLabel = "Percent obese: "; 
     }
 
     var toolTip = d3.tip()
       .attr("class", "tooltip")
-      .offset([80, -60])
+      //.offset([80, -60])
       .html(function(d) {
         return (`${d.state}<br>${xLabel}${d[chosenXAxis]}<br>${yLabel}${d[chosenYAxis]}`);
       });
@@ -114,7 +114,7 @@ function renderXAxis(newXScale, xAxis) {
     circlesGroup.call(toolTip);
   
     circlesGroup.on("mouseover", function(data) {
-      toolTip.show(data);
+      toolTip.show(data, this);
     })
       .on("mouseout", function(data) {
         toolTip.hide(data);
@@ -136,14 +136,6 @@ function renderXAxis(newXScale, xAxis) {
       data.smokes = +data.smokes;
       data.obesity = +data.obesity;
     })
-
-    function printData(d) { 
-      d.forEach(state => {
-      console.log(state.healthcare + ", " + state.age); 
-      })
-    }
-    printData(statisticalData);
-
 
     var xLinearScale = xScale(statisticalData, chosenXAxis);
     var yLinearScale = yScale(statisticalData, chosenYAxis);
@@ -238,6 +230,7 @@ function renderXAxis(newXScale, xAxis) {
       var value = d3.select(this).attr("value");
       if (value !== chosenXAxis) {
         chosenXAxis = value;
+
         xLinearScale = xScale(statisticalData, chosenXAxis);
         xAxis = renderXAxis(xLinearScale, xAxis);
 
