@@ -1,11 +1,8 @@
-//x axis will be median age, percent lacking healthcare, percent in poverty
-//y axis will be median household income, percentage smokes, percent obesity
-
 var svgWidth = 800;
 var svgHeight = 600;
 
 var margin = {
-  top: 40,
+  top: 70,
   right: 20,
   bottom: 100,
   left: 200
