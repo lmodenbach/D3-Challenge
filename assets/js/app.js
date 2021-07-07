@@ -133,7 +133,7 @@ function renderXAxis(newXScale, xAxis) {
       data.income = +data.income;
       data.smokes = +data.smokes;
       data.obesity = +data.obesity;
-    })
+    });
 
     var xLinearScale = xScale(statisticalData, chosenXAxis);
     var yLinearScale = yScale(statisticalData, chosenYAxis);
@@ -160,15 +160,15 @@ function renderXAxis(newXScale, xAxis) {
     .attr("fill", "green")
     .attr("opacity", ".90");
 
-    chartGroup.selectAll("text")
-    .data(statisticalData)
-    .enter()
-    .append("text")
-    .text(d => `${d.abbr}`)
-    .attr("x", d => xLinearScale(d[chosenXAxis]) - 7)
-    .attr("y", d => yLinearScale(d[chosenYAxis]) + 3)
-    .attr("text-anchor", "center")
-    .attr("font-size", 9);
+    // chartGroup.selectAll("text")
+    // .data(statisticalData)
+    // .enter()
+    // .append("text")
+    // .text(d => `${d.abbr}`)
+    // .attr("x", d => xLinearScale(d[chosenXAxis]) - 7)
+    // .attr("y", d => yLinearScale(d[chosenYAxis]) + 3)
+    // .attr("text-anchor", "center")
+    // .attr("font-size", 9);
 
 
     var xLabelsGroup = chartGroup.append("g")
@@ -258,6 +258,11 @@ function renderXAxis(newXScale, xAxis) {
             .classed("inactive", true);
         }
       }
+      
+      circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+      circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+
+    });  
 
       yLabelsGroup.selectAll("text")
       .on("click", function() {
@@ -266,9 +271,6 @@ function renderXAxis(newXScale, xAxis) {
         chosenYAxis = value;
         yLinearScale = yScale(statisticalData, chosenYAxis);
         yAxis = renderYAxis(yLinearScale, yAxis);
-
-        circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
-        circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
         if (chosenYAxis === "income") {
           incomeLabel
@@ -286,8 +288,12 @@ function renderXAxis(newXScale, xAxis) {
             .classed("inactive", true);
         }
       }
-    });
+
+    circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+    circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
   }); 
+
+  
 
 });
