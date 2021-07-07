@@ -7,7 +7,7 @@ var svgHeight = 600;
 var margin = {
   top: 40,
   right: 20,
-  bottom: 80,
+  bottom: 100,
   left: 200
 };
 
@@ -28,8 +28,8 @@ var chosenYAxis = "income";
 
 function xScale(data, chosenXAxis) {
     var xLinearScale = d3.scaleLinear()
-      .domain([d3.min(data, d => +d[chosenXAxis]) * 1,
-        d3.max(data, d => +d[chosenXAxis]) * 1])
+      .domain([d3.min(data, d => +d[chosenXAxis]), //*0.8
+        d3.max(data, d => +d[chosenXAxis])]) //*1.2
       .range([0, chartWidth]);
   
     return xLinearScale;
@@ -172,7 +172,7 @@ function renderXAxis(newXScale, xAxis) {
 
 
     var xLabelsGroup = chartGroup.append("g")
-    .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + 20})`);
+    .attr("transform", `translate(${chartWidth / 3}, ${chartHeight +35})`);
 
     var povertyLabel = xLabelsGroup.append("text")
     .attr("x", 0)
@@ -197,7 +197,7 @@ function renderXAxis(newXScale, xAxis) {
 
 
     var yLabelsGroup = chartGroup.append("g")
-    .attr("transform", `translate(${chartWidth / 4}, ${chartHeight / 2})`);
+    .attr("transform", `translate(${chartWidth / 6}, ${chartHeight / 3})`);
 
     var incomeLabel = yLabelsGroup.append("text")
     .attr("transform", "rotate(-90)")
