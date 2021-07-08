@@ -174,21 +174,21 @@ function renderXAxis(newXScale, xAxis) {
     var povertyLabel = xLabelsGroup.append("text")
     .attr("x", 0)
     .attr("y", 20)
-    .attr("value", "poverty") // value to grab for event listener
+    .attr("value", "poverty") 
     .classed("active", true)
     .text("Percent of Population Facing Poverty");
 
     var healthcareLabel = xLabelsGroup.append("text")
     .attr("x", 0)
     .attr("y", 40)
-    .attr("value", "healthcare") // value to grab for event listener
+    .attr("value", "healthcare") 
     .classed("inactive", true)
     .text("Percent of Population Lacking Healthcare");
 
     var ageLabel = xLabelsGroup.append("text")
     .attr("x", 0)
     .attr("y", 60)
-    .attr("value", "age") // value to grab for event listener
+    .attr("value", "age") 
     .classed("inactive", true)
     .text("Median Age of Population");
 
@@ -200,7 +200,7 @@ function renderXAxis(newXScale, xAxis) {
     .attr("transform", "rotate(-90)")
     .attr("y", 0 - margin.left)
     .attr("x", 0 - (chartHeight / 2))
-    .attr("value", "income") // value to grab for event listener
+    .attr("value", "income") 
     .classed("active", true)
     .attr("dy", "1em")
     .classed("axis-text", true)
@@ -210,7 +210,7 @@ function renderXAxis(newXScale, xAxis) {
     .attr("transform", "rotate(-90)")
     .attr("y", 0 - margin.left - 20)
     .attr("x", 0 - (chartHeight / 2))
-    .attr("value", "smokes") // value to grab for event listener
+    .attr("value", "smokes") 
     .classed("inactive", true)
     .attr("dy", "1em")
     .classed("axis-text", true)
@@ -220,7 +220,7 @@ function renderXAxis(newXScale, xAxis) {
     .attr("transform", "rotate(-90)")
     .attr("y", 0 - margin.left - 40)
     .attr("x", 0 - (chartHeight / 2))
-    .attr("value", "obesity") // value to grab for event listener
+    .attr("value", "obesity") 
     .classed("inactive", true)
     .attr("dy", "1em")
     .classed("axis-text", true)
