@@ -1,19 +1,19 @@
 .active {
     font-weight: bold;
-    fill: #000;
+    fill: rgb(97, 16, 16);
     transition: fill 0.3s ease-out; 
     text-anchor: middle;
   }
   
 .inactive {
     font-weight: lighter;
-    fill: #c9c9c9;
+    fill: #e6b1b1;
     transition: fill 0.3s ease-out; 
     text-anchor: middle;
   }
 
   .inactive:hover {
-    fill: #000;
+    fill:rgb(97, 16, 16);
     cursor: pointer;
   }
 
@@ -31,9 +31,22 @@
 
   .circle {
     fill: #af3549;
-    stroke: #cf8888;
+    stroke: #d8a6a6;
+    stroke-width: 3px;
   }
   
+  .circle-text {
+    color:rgb(97, 16, 16);
+  }
+
+  .y-axis {
+    color:rgb(97, 16, 16);  
+  }
+
+  .x-axis {
+    color:rgb(97, 16, 16);  
+  }
+
   .dynamicChart {
     display: block;
     margin: 0;

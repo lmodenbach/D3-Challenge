@@ -172,6 +172,7 @@ function renderXAxis(newXScale, xAxis) {
     .data(statisticalData)
     .enter()
     .append("text")
+    .classed("circle-text", true)
     .attr("x", d => xLinearScale(d[chosenXAxis]) - 7)
     .attr("y", d => yLinearScale(d[chosenYAxis]) + 3)
     .attr("font-size", 10)
@@ -205,7 +206,7 @@ function renderXAxis(newXScale, xAxis) {
 
 
     var yLabelsGroup = chartGroup.append("g")
-    .attr("transform", `translate(${chartWidth / 6}, 20)`);
+    .attr("transform", `translate(${chartWidth / 5}, 20)`);
 
     var incomeLabel = yLabelsGroup.append("text")
     .attr("transform", "rotate(-90)")
@@ -213,7 +214,6 @@ function renderXAxis(newXScale, xAxis) {
     .attr("x", 0 - (chartHeight / 2))
     .attr("value", "income") 
     .classed("active", true)
-    .attr("dy", "1em")
     .classed("axis-text", true)
     .text("Population Median Income");
 
@@ -223,7 +223,6 @@ function renderXAxis(newXScale, xAxis) {
     .attr("x", 0 - (chartHeight / 2))
     .attr("value", "smokes") 
     .classed("inactive", true)
-    .attr("dy", "1em")
     .classed("axis-text", true)
     .text("Percent of Population Who Smokes");
 
@@ -233,7 +232,6 @@ function renderXAxis(newXScale, xAxis) {
     .attr("x", 0 - (chartHeight / 2))
     .attr("value", "obesity") 
     .classed("inactive", true)
-    .attr("dy", "1em")
     .classed("axis-text", true)
     .text("Percentage of Population Facing Obesity");
 
