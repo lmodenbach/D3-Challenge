@@ -81,7 +81,7 @@ function renderXAxis(newXScale, xAxis) {
     return circleLabels;
   }
 
-  function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
+  function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circleLabels) {
 
     var xLabel;
   
@@ -116,15 +116,23 @@ function renderXAxis(newXScale, xAxis) {
       });
   
     circlesGroup.call(toolTip);
-  
+    circleLabels.call(toolTip);
+
     circlesGroup.on("mouseover", function(data) {
       toolTip.show(data, this);
     })
       .on("mouseout", function(data) {
         toolTip.hide(data);
-      });
+    });
+
+    circleLabels.on("mouseover", function(data) {
+      toolTip.show(data, this);
+    })
+      .on("mouseout", function(data) {
+         toolTip.hide(data);
+    });
   
-    return circlesGroup;
+    return circlesGroup, circleLabels;
   }
 
 
@@ -235,7 +243,7 @@ function renderXAxis(newXScale, xAxis) {
     .text("Percentage of Population Facing Obesity");
 
 
-    var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+    var circlesGroup, circleLabels = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circleLabels);
 
 
       xLabelsGroup.selectAll("text")
@@ -247,8 +255,8 @@ function renderXAxis(newXScale, xAxis) {
         xLinearScale = xScale(statisticalData, chosenXAxis);
         xAxis = renderXAxis(xLinearScale, xAxis);
         circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
-        circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
         circleLabels = renderCircleLabels(circleLabels, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+        circlesGroup, circleLabels = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circleLabels);
 
         if (chosenXAxis === "poverty") {
           povertyLabel
@@ -295,8 +303,8 @@ function renderXAxis(newXScale, xAxis) {
         yLinearScale = yScale(statisticalData, chosenYAxis);
         yAxis = renderYAxis(yLinearScale, yAxis);
         circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
-        circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
-        circleLabels = circleLabels = renderCircleLabels(circleLabels, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+        circleLabels = renderCircleLabels(circleLabels, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+        circlesGroup, circleLabels = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circleLabels);
 
         if (chosenYAxis === "income") {
           incomeLabel
