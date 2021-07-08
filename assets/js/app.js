@@ -72,6 +72,14 @@ function renderXAxis(newXScale, xAxis) {
     return circlesGroup;
   }
 
+  function renderCircleLabels (circleLabels, newXScale, chosenXAxis, newYScale, chosenYAxis) {
+    circleLabels.transition()
+      .duration(1000)
+      .attr("x", d => newXScale(d[chosenXAxis]) - 7)
+      .attr("y", d => newYScale(d[chosenYAxis]) + 3);
+
+    return circleLabels;
+  }
 
   function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
 
@@ -120,7 +128,6 @@ function renderXAxis(newXScale, xAxis) {
   }
 
 
-
   d3.csv("assets/data/data.csv").then(function(statisticalData, err) {
     if (err) throw err;
   
@@ -158,15 +165,15 @@ function renderXAxis(newXScale, xAxis) {
     .attr("fill", "green")
     .attr("opacity", ".90");
 
-    // chartGroup.selectAll("text")
-    // .data(statisticalData)
-    // .enter()
-    // .append("text")
-    // .attr("x", d => xLinearScale(d[chosenXAxis]) - 7)
-    // .attr("y", d => yLinearScale(d[chosenYAxis]) + 3)
-    // .attr("text-anchor", "center")
-    // .attr("font-size", 9)
-    // .text(d => d.abbr);
+    var circleLabels = chartGroup.selectAll(null)
+    .data(statisticalData)
+    .enter()
+    .append("text")
+    .attr("x", d => xLinearScale(d[chosenXAxis]) - 7)
+    .attr("y", d => yLinearScale(d[chosenYAxis]) + 3)
+    .attr("font-size", 9)
+    .attr("text-anchor", "center")
+    .text(d => d.abbr);
 
 
     var xLabelsGroup = chartGroup.append("g")
@@ -239,6 +246,9 @@ function renderXAxis(newXScale, xAxis) {
 
         xLinearScale = xScale(statisticalData, chosenXAxis);
         xAxis = renderXAxis(xLinearScale, xAxis);
+        circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+        circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+        circleLabels = renderCircleLabels(circleLabels, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
         if (chosenXAxis === "poverty") {
           povertyLabel
@@ -274,10 +284,6 @@ function renderXAxis(newXScale, xAxis) {
             .classed("active", false);
         }
       }
-      
-      circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
-      circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
-
     });  
 
       yLabelsGroup.selectAll("text")
@@ -285,8 +291,12 @@ function renderXAxis(newXScale, xAxis) {
       var value = d3.select(this).attr("value");
       if (value !== chosenYAxis) {
         chosenYAxis = value;
+
         yLinearScale = yScale(statisticalData, chosenYAxis);
         yAxis = renderYAxis(yLinearScale, yAxis);
+        circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+        circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+        circleLabels = circleLabels = renderCircleLabels(circleLabels, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
         if (chosenYAxis === "income") {
           incomeLabel
@@ -322,9 +332,6 @@ function renderXAxis(newXScale, xAxis) {
             .classed("active", false);
         }
       }
-
-    circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
-    circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
   }); 
 
