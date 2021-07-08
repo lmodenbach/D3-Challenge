@@ -243,16 +243,34 @@ function renderXAxis(newXScale, xAxis) {
           povertyLabel
             .classed("active", true)
             .classed("inactive", false);
+          healthcareLabel
+            .classed("inactive", true)
+            .classed("active", false);  
+          ageLabel
+            .classed("inactive", true)
+            .classed("active", false);  
         }
         else if (chosenXAxis === "healthcare") {
           healthcareLabel
-            .classed("active", false)
-            .classed("inactive", true);
+            .classed("active", true)
+            .classed("inactive", false);
+          ageLabel
+            .classed("inactive", true)
+            .classed("active", false);
+          povertyLabel
+            .classed("inactive", true)
+            .classed("active", false);
         }
         else if (chosenXAxis === "age") {
           ageLabel
-            .classed("active", false)
-            .classed("inactive", true);
+            .classed("active", true)
+            .classed("inactive", false);
+          povertyLabel
+            .classed("inactive", true)
+            .classed("active", false);
+          healthcareLabel
+            .classed("inactive", true)
+            .classed("active", false);
         }
       }
       
@@ -273,16 +291,34 @@ function renderXAxis(newXScale, xAxis) {
           incomeLabel
             .classed("active", true)
             .classed("inactive", false);
+          smokesLabel
+            .classed("inactive", true)
+            .classed("active", false);
+          obesityLabel
+            .classed("inactive", true)
+            .classed("active", false);
         }
         else if (chosenYAxis === "smokes") {
           smokesLabel
-            .classed("active", false)
-            .classed("inactive", true);
+            .classed("active", true)
+            .classed("inactive", false);
+          obesityLabel
+            .classed("inactive", true)
+            .classed("active", false);
+          incomeLabel
+            .classed("inactive", true)
+            .classed("active", false);
         }
         else if (chosenYAxis === "obesity") {
           obesityLabel
-            .classed("active", false)
-            .classed("inactive", true);
+            .classed("active", true)
+            .classed("inactive", false);
+          incomeLabel
+            .classed("inactive", true)
+            .classed("active", false);
+          smokesLabel
+            .classed("inactive", true)
+            .classed("active", false);
         }
       }
 
