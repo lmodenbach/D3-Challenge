@@ -102,6 +102,7 @@ function renderXAxis(newXScale, xAxis) {
 
     var toolTip = d3.tip()
       .attr("class", "tooltip")
+      .attr("class", "d3-tip")
       .html(function(d) {
         return (`${d.state}<br>${xLabel}${d[chosenXAxis]}<br>${yLabel}${d[chosenYAxis]}`);
       });
