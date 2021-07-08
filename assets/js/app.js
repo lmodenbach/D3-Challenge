@@ -108,7 +108,6 @@ function renderXAxis(newXScale, xAxis) {
       });
   
     circlesGroup.call(toolTip);
-    circleLabels.call(toolTip);
 
     circlesGroup.on("mouseover", function(data) {
       toolTip.show(data, this);
@@ -116,15 +115,8 @@ function renderXAxis(newXScale, xAxis) {
       .on("mouseout", function(data) {
         toolTip.hide(data);
     });
-
-    circleLabels.on("mouseover", function(data) {
-      toolTip.show(data, this);
-    })
-      .on("mouseout", function(data) {
-        toolTip.hide(data);
-    });
   
-    return circlesGroup, circleLabels;
+    return circlesGroup; 
   }
 
   var chosenXAxis = "poverty";
@@ -246,7 +238,7 @@ function renderXAxis(newXScale, xAxis) {
         xLinearScale = xScale(statisticalData, chosenXAxis);
         xAxis = renderXAxis(xLinearScale, xAxis);
         circlesGroup, circleLabels = renderCircleLayers(circlesGroup, circleLabels, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
-        circlesGroup, circleLabels = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circleLabels);
+        circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
         if (chosenXAxis === "poverty") {
           povertyLabel
@@ -293,7 +285,7 @@ function renderXAxis(newXScale, xAxis) {
         yLinearScale = yScale(statisticalData, chosenYAxis);
         yAxis = renderYAxis(yLinearScale, yAxis);
         circlesGroup, circleLabels = renderCircleLayers(circlesGroup, circleLabels, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
-        circlesGroup, circleLabels = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circleLabels);
+        circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
         if (chosenYAxis === "income") {
           incomeLabel
