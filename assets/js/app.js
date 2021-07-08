@@ -121,7 +121,7 @@ function renderXAxis(newXScale, xAxis) {
       toolTip.show(data, this);
     })
       .on("mouseout", function(data) {
-         toolTip.hide(data);
+        toolTip.hide(data);
     });
   
     return circlesGroup, circleLabels;
@@ -157,6 +157,17 @@ function renderXAxis(newXScale, xAxis) {
     .classed("y-axis", true)
     .call(leftAxis);
 
+    var circleLabels = chartGroup.selectAll(null)
+    .data(statisticalData)
+    .enter()
+    .append("text")
+    .classed("circle-text", true)
+    .attr("x", d => xLinearScale(d[chosenXAxis]) - 7)
+    .attr("y", d => yLinearScale(d[chosenYAxis]) + 3)
+    .attr("font-size", 9)
+    .attr("text-anchor", "center")
+    .text(d => d.abbr);
+
     var circlesGroup = chartGroup.selectAll("circle")
     .data(statisticalData)
     .enter()
@@ -165,20 +176,7 @@ function renderXAxis(newXScale, xAxis) {
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
     .attr("cy", d => yLinearScale(d[chosenYAxis]))
     .attr("r", 14)
-    .attr("fill", "green")
-    .attr("opacity", ".90");
-
-    var circleLabels = chartGroup.selectAll(null)
-    .data(statisticalData)
-    .enter()
-    .append("text")
-    .classed("circle-text", true)
-    .attr("x", d => xLinearScale(d[chosenXAxis]) - 7)
-    .attr("y", d => yLinearScale(d[chosenYAxis]) + 3)
-    .attr("font-size", 10)
-    .attr("text-anchor", "center")
-    .text(d => d.abbr);
-
+    .attr("opacity", ".60");
 
     var xLabelsGroup = chartGroup.append("g")
     .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + 40})`);

@@ -35,8 +35,15 @@
     stroke-width: 3px;
   }
   
+  .circle:hover {
+    fill: #af3549;
+    stroke: #b90606;
+    stroke-width: 4px;
+  }
+
   .circle-text {
     color:rgb(97, 16, 16);
+    font-weight: bold;
   }
 
   .y-axis {
