@@ -22,9 +22,19 @@
     font-size: 12px;
     line-height: 1;
     line-height: 1.5em;
-    color: #fff;
+    color: rgb(97, 16, 16);
     text-align: center;
     text-transform: capitalize;
-    background: rgba(0, 0, 0, 0.8);
+    background: #e6b1b1;
     border-radius: 4px;
+  }
+
+  .circle {
+    fill: #af3549;
+    stroke: #cf8888;
+  }
+  
+  .dynamicChart {
+    display: block;
+    margin: 0;
   }

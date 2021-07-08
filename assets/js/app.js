@@ -20,9 +20,6 @@ var svg = d3
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-var chosenXAxis = "poverty";
-var chosenYAxis = "income";
-
 function xScale(data, chosenXAxis) {
     var xLinearScale = d3.scaleLinear()
       .domain([d3.min(data, d => +d[chosenXAxis]), //*0.8
@@ -62,23 +59,18 @@ function renderXAxis(newXScale, xAxis) {
   }
 
   
-  function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
+  function renderCircleLayers(circlesGroup, circleLabels, newXScale, chosenXAxis, newYScale, chosenYAxis) {
 
     circlesGroup.transition()
       .duration(1000)
       .attr("cx", d => newXScale(d[chosenXAxis]))
       .attr("cy", d => newYScale(d[chosenYAxis]));
-  
-    return circlesGroup;
-  }
-
-  function renderCircleLabels (circleLabels, newXScale, chosenXAxis, newYScale, chosenYAxis) {
     circleLabels.transition()
       .duration(1000)
       .attr("x", d => newXScale(d[chosenXAxis]) - 7)
       .attr("y", d => newYScale(d[chosenYAxis]) + 3);
-
-    return circleLabels;
+  
+    return circlesGroup, circleLabels;
   }
 
   function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circleLabels) {
@@ -102,10 +94,10 @@ function renderXAxis(newXScale, xAxis) {
       yLabel = "Median Income: ";
     }
     else if (chosenYAxis === "smokes") {
-      yLabel = "Percent of Population Smokers: ";
+      yLabel = "Percent Smokers: ";
     }
     else if (chosenYAxis === "obesity") {
-      yLabel = "Percent obese: "; 
+      yLabel = "Percent Obese: "; 
     }
 
     var toolTip = d3.tip()
@@ -135,6 +127,8 @@ function renderXAxis(newXScale, xAxis) {
     return circlesGroup, circleLabels;
   }
 
+  var chosenXAxis = "poverty";
+  var chosenYAxis = "income";
 
   d3.csv("assets/data/data.csv").then(function(statisticalData, err) {
     if (err) throw err;
@@ -167,9 +161,10 @@ function renderXAxis(newXScale, xAxis) {
     .data(statisticalData)
     .enter()
     .append("circle")
+    .classed("circle", true)
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
     .attr("cy", d => yLinearScale(d[chosenYAxis]))
-    .attr("r", 10)
+    .attr("r", 14)
     .attr("fill", "green")
     .attr("opacity", ".90");
 
@@ -179,13 +174,13 @@ function renderXAxis(newXScale, xAxis) {
     .append("text")
     .attr("x", d => xLinearScale(d[chosenXAxis]) - 7)
     .attr("y", d => yLinearScale(d[chosenYAxis]) + 3)
-    .attr("font-size", 9)
+    .attr("font-size", 10)
     .attr("text-anchor", "center")
     .text(d => d.abbr);
 
 
     var xLabelsGroup = chartGroup.append("g")
-    .attr("transform", `translate(${chartWidth / 3}, ${chartHeight +35})`);
+    .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + 40})`);
 
     var povertyLabel = xLabelsGroup.append("text")
     .attr("x", 0)
@@ -210,7 +205,7 @@ function renderXAxis(newXScale, xAxis) {
 
 
     var yLabelsGroup = chartGroup.append("g")
-    .attr("transform", `translate(${chartWidth / 6}, ${chartHeight / 3})`);
+    .attr("transform", `translate(${chartWidth / 6}, 20)`);
 
     var incomeLabel = yLabelsGroup.append("text")
     .attr("transform", "rotate(-90)")
@@ -254,8 +249,7 @@ function renderXAxis(newXScale, xAxis) {
 
         xLinearScale = xScale(statisticalData, chosenXAxis);
         xAxis = renderXAxis(xLinearScale, xAxis);
-        circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
-        circleLabels = renderCircleLabels(circleLabels, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+        circlesGroup, circleLabels = renderCircleLayers(circlesGroup, circleLabels, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
         circlesGroup, circleLabels = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circleLabels);
 
         if (chosenXAxis === "poverty") {
@@ -302,8 +296,7 @@ function renderXAxis(newXScale, xAxis) {
 
         yLinearScale = yScale(statisticalData, chosenYAxis);
         yAxis = renderYAxis(yLinearScale, yAxis);
-        circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
-        circleLabels = renderCircleLabels(circleLabels, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+        circlesGroup, circleLabels = renderCircleLayers(circlesGroup, circleLabels, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
         circlesGroup, circleLabels = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circleLabels);
 
         if (chosenYAxis === "income") {
@@ -341,8 +334,6 @@ function renderXAxis(newXScale, xAxis) {
         }
       }
 
-  }); 
-
-  
+  });  
 
 });
