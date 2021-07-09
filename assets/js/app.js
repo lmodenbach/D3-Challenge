@@ -73,7 +73,7 @@ function renderXAxis(newXScale, xAxis) {
     return circlesGroup, circleLabels;
   }
 
-  function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circleLabels) {
+  function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
 
     var xLabel;
   
@@ -226,7 +226,7 @@ function renderXAxis(newXScale, xAxis) {
     .text("Percentage of Population Facing Obesity");
 
 
-    var circlesGroup, circleLabels = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, circleLabels);
+    var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
 
       xLabelsGroup.selectAll("text")
