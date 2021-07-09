@@ -6,8 +6,8 @@
   }
   
 .inactive {
-    font-weight: lighter;
-    fill: #e6b1b1;
+    /* font-weight: lighter; */
+    fill: #e93e3e;
     transition: fill 0.3s ease-out; 
     text-anchor: middle;
   }
@@ -60,5 +60,8 @@
   }
 
   html body {
-    background-image: url("./assets/media/stack-newspapers-background.jpg");
+    background-image: url("../media/lightened-collection-newspapers.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
   }

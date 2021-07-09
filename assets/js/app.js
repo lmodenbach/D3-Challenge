@@ -2,10 +2,10 @@ var svgWidth = 1000;
 var svgHeight = 675;
 
 var margin = {
-  top: 70,
-  right: 20,
+  top: 15,
+  right: 15,
   bottom: 115,
-  left: 200
+  left: 150
 };
 
 var chartWidth = svgWidth - margin.left - margin.right;
@@ -196,7 +196,7 @@ function renderXAxis(newXScale, xAxis) {
 
 
     var yLabelsGroup = chartGroup.append("g")
-    .attr("transform", `translate(${chartWidth / 8}, 20)`);
+    .attr("transform", `translate(70, 50)`);
 
     var incomeLabel = yLabelsGroup.append("text")
     .attr("transform", "rotate(-90)")
