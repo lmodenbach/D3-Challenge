@@ -171,7 +171,7 @@ function renderXAxis(newXScale, xAxis) {
     .attr("opacity", ".60");
 
     var xLabelsGroup = chartGroup.append("g")
-    .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + 40})`);
+    .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + 30})`);
 
     var povertyLabel = xLabelsGroup.append("text")
     .attr("x", 0)
@@ -196,7 +196,7 @@ function renderXAxis(newXScale, xAxis) {
 
 
     var yLabelsGroup = chartGroup.append("g")
-    .attr("transform", `translate(70, 50)`);
+    .attr("transform", `translate(70, 10)`);
 
     var incomeLabel = yLabelsGroup.append("text")
     .attr("transform", "rotate(-90)")
