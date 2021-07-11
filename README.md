@@ -3,5 +3,6 @@ Simulated data visualization position for a newspaper. Task is to analyze trends
 
 Site can be viewed at: https://lmodenbach.github.io/D3-Challenge/
 
-![2021-07-10](https://user-images.githubusercontent.com/44123311/125180735-7d724080-e1b2-11eb-8282-f3a88ca3e1c8.png)
+![2021-07-10 (1)](https://user-images.githubusercontent.com/44123311/125182539-c1217600-e1c3-11eb-801e-c7b9d6cb0b25.png)
+
  
