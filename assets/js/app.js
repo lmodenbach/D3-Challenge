@@ -1,3 +1,7 @@
+//import statistical functions
+import { linearRegression, linearRegressionLine } from './simpleStatistics.js';
+
+//set svg and chart dimensions and margins 
 var svgWidth = 1000;
 var svgHeight = 675;
 
@@ -11,15 +15,19 @@ var margin = {
 var chartWidth = svgWidth - margin.left - margin.right;
 var chartHeight = svgHeight - margin.top - margin.bottom;
 
+//add svg to page
 var svg = d3
   .select(".dynamicChart")
   .append("svg")
   .attr("width", svgWidth)
   .attr("height", svgHeight);
 
+//add chartgroup "g" to svg, translate out of the margins  
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+//take in data and a column argument based on chosen axis, calculate domain, set range, return
+//linear scale 
 function xScale(data, chosenXAxis) {
     var xLinearScale = d3.scaleLinear()
       .domain([d3.min(data, d => +d[chosenXAxis]), //*0.8
@@ -29,6 +37,8 @@ function xScale(data, chosenXAxis) {
     return xLinearScale;
 }
 
+//take in data and a column argument based on chosen axis, calculate domain, set range, return
+//linear scale
 function yScale(data, chosenYAxis) {
     var yLinearScale = d3.scaleLinear()
       .domain([d3.min(data, d => +d[chosenYAxis]), //* 0.8
@@ -38,6 +48,7 @@ function yScale(data, chosenYAxis) {
     return yLinearScale;
 }
 
+//take in axis object and new linear scale, transform axis over span of 1 second
 function renderXAxis(newXScale, xAxis) {
     var bottomAxis = d3.axisBottom(newXScale);
   
@@ -48,6 +59,7 @@ function renderXAxis(newXScale, xAxis) {
     return xAxis;
   }
 
+  //take in axis object and new linear scale, transform axis over span of 1 second
   function renderYAxis(newYScale, yAxis) {
     var leftAxis = d3.axisLeft(newYScale);
   
@@ -58,7 +70,8 @@ function renderXAxis(newXScale, xAxis) {
     return yAxis;
   }
 
-  
+  //double duty function, takes in old circle group and labels and transforms their data over span
+  //of 1 second using the new column specs and new linear scales, returns new circles group and labels 
   function renderCircleLayers(circlesGroup, circleLabels, newXScale, chosenXAxis, newYScale, chosenYAxis) {
 
     circlesGroup.transition()
@@ -73,6 +86,7 @@ function renderXAxis(newXScale, xAxis) {
     return circlesGroup, circleLabels;
   }
 
+  //update tooltip data using new column designations with old circles group, return new circles group
   function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
 
     var xLabel;
@@ -107,8 +121,10 @@ function renderXAxis(newXScale, xAxis) {
         return (`${d.state}<br>${xLabel}${d[chosenXAxis]}<br>${yLabel}${d[chosenYAxis]}`);
       });
   
+    //add tooltip to circles group
     circlesGroup.call(toolTip);
 
+    //listener for circles to activate/deactivate tooltip
     circlesGroup.on("mouseover", function(data) {
       toolTip.show(data, this);
     })
@@ -119,12 +135,15 @@ function renderXAxis(newXScale, xAxis) {
     return circlesGroup; 
   }
 
+  //initialize axes
   var chosenXAxis = "poverty";
   var chosenYAxis = "income";
 
+  //read in data csv, catch any error
   d3.csv("assets/data/data.csv").then(function(statisticalData, err) {
     if (err) throw err;
   
+  //transform data to numeric form
     statisticalData.forEach(function(data) {
       data.age = +data.age;
       data.healthcare = +data.healthcare;
@@ -134,12 +153,15 @@ function renderXAxis(newXScale, xAxis) {
       data.obesity = +data.obesity;
     });
 
+  //intitalize linear scales
     var xLinearScale = xScale(statisticalData, chosenXAxis);
     var yLinearScale = yScale(statisticalData, chosenYAxis);
 
+  //create axes from linear scales
     var bottomAxis = d3.axisBottom(xLinearScale);
     var leftAxis = d3.axisLeft(yLinearScale);
   
+   //add axes to chartgroup, drop x-axis to bottom of page 
     var xAxis = chartGroup.append("g")
     .classed("x-axis", true)
     .attr("transform", `translate(0, ${chartHeight})`)
@@ -149,6 +171,20 @@ function renderXAxis(newXScale, xAxis) {
     .classed("y-axis", true)
     .call(leftAxis);
 
+    //attempting a regression line here........
+    var regressArray = statisticalData.map(d => [d[chosenXAxis], d[chosenYAxis]]);
+    var regressFunction = linearRegressionLine(linearRegression(regressArray));
+
+    var regressLine = chartGroup.selectAll("g")
+      .data(statisticalData)
+      .enter()
+      .append("path")
+      .classed("rLine", true)
+      .attr("d", d3.line(d => [d[chosenXAxis], regressFunction(d[chosenXAxis])]));
+  //.........section above under construction      
+
+  //add state abbreviations to chartgroup where corresponding circles will be, center them on
+  //circles' centers
     var circleLabels = chartGroup.selectAll(null)
     .data(statisticalData)
     .enter()
@@ -160,6 +196,8 @@ function renderXAxis(newXScale, xAxis) {
     .attr("text-anchor", "center")
     .text(d => d.abbr);
 
+  //add circles to chartgroup, leave slightly translucent so labels show through, center coordinates
+  //based on each data point from specified column passed to the linear scale  
     var circlesGroup = chartGroup.selectAll("circle")
     .data(statisticalData)
     .enter()
@@ -170,6 +208,8 @@ function renderXAxis(newXScale, xAxis) {
     .attr("r", 14)
     .attr("opacity", ".60");
 
+   //create axis label groups and labels, place on chart using dimensions, class so that css 
+  //distinguishes current axis from unselected ones 
     var xLabelsGroup = chartGroup.append("g")
     .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + 30})`);
 
@@ -194,7 +234,8 @@ function renderXAxis(newXScale, xAxis) {
     .classed("inactive", true)
     .text("Median Age of Population");
 
-
+  //create axis label groups and labels, place on chart using dimensions, class so that css 
+  //distinguishes current axis from unselected ones
     var yLabelsGroup = chartGroup.append("g")
     .attr("transform", `translate(70, 10)`);
 
@@ -225,21 +266,26 @@ function renderXAxis(newXScale, xAxis) {
     .classed("axis-text", true)
     .text("Percentage of Population Facing Obesity");
 
-
+    //initialize tooltip
     var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
+    //axis listener functions
 
       xLabelsGroup.selectAll("text")
       .on("click", function() {
       var value = d3.select(this).attr("value");
+      
+      //update axis value
       if (value !== chosenXAxis) {
         chosenXAxis = value;
-
+        
+        //update linear scale, axis, circles/tooltips/labels from user choice of axis label
         xLinearScale = xScale(statisticalData, chosenXAxis);
         xAxis = renderXAxis(xLinearScale, xAxis);
         circlesGroup, circleLabels = renderCircleLayers(circlesGroup, circleLabels, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
         circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
+        //make sure css is distinguishing active/inactive axes
         if (chosenXAxis === "poverty") {
           povertyLabel
             .classed("active", true)
@@ -279,14 +325,18 @@ function renderXAxis(newXScale, xAxis) {
       yLabelsGroup.selectAll("text")
       .on("click", function() {
       var value = d3.select(this).attr("value");
+      
+      //update axis value
       if (value !== chosenYAxis) {
         chosenYAxis = value;
 
+        //update linear scale, axis, circles/tooltips/labels from user choice of axis label
         yLinearScale = yScale(statisticalData, chosenYAxis);
         yAxis = renderYAxis(yLinearScale, yAxis);
         circlesGroup, circleLabels = renderCircleLayers(circlesGroup, circleLabels, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
         circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
+        //make sure css is distinguishing active/inactive axes
         if (chosenYAxis === "income") {
           incomeLabel
             .classed("active", true)
